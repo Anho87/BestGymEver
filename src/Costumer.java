@@ -1,21 +1,21 @@
 public class Costumer {
-   private  long personalNumber;
+    private String socialSecurityNumber;
     private String name;
     private int subscriptionDate;
-    
 
-    public Costumer(long personalNumber, String name, int subscriptionDate) {
-        this.personalNumber = personalNumber;
+
+    public Costumer(String personalNumber, String name, int subscriptionDate) {
+        this.socialSecurityNumber = personalNumber;
         this.name = name;
         this.subscriptionDate = subscriptionDate;
     }
 
-    public long getPersonalNumber() {
-        return personalNumber;
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
     }
 
-    public void setPersonalNumber(long personalNumber) {
-        this.personalNumber = personalNumber;
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
     }
 
     public String getName() {
@@ -36,10 +36,6 @@ public class Costumer {
 
     @Override
     public String toString() {
-        return "Costumer{" +
-                "personalNumber=" + personalNumber +
-                ", name='" + name + '\'' +
-                ", subscriptionDate=" + subscriptionDate +
-                '}';
+        return socialSecurityNumber + " " + name + "\n" + subscriptionDate;
     }
 }
