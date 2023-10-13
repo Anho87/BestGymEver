@@ -9,7 +9,9 @@ public class Costumer {
         this.name = name;
         this.subscriptionDate = subscriptionDate;
     }
-
+    public Costumer(){
+        
+    }
     public String getSocialSecurityNumber() {
         return socialSecurityNumber;
     }

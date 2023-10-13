@@ -54,16 +54,24 @@ public class BestGymEver {
         }
     }
     public Costumer createCostumer(String firstLine, String secondLine) {
+        Costumer c = new Costumer();
         String socialSecurityNumber = "";
         String name = "";
-        int subscriptionDate = 0;
+        int subscriptionDate;
         String[] firstLineParts = firstLine.split(",");
         if (firstLineParts.length == 2) {
             socialSecurityNumber = firstLineParts[0].trim();
             name = firstLineParts[1].trim();
         }
-        subscriptionDate = Integer.parseInt(secondLine.replace("-","").trim());
-        Costumer c = new Costumer(socialSecurityNumber,name,subscriptionDate);
+        try{
+            subscriptionDate = Integer.parseInt(secondLine.replace("-","").trim());
+            c = new Costumer(socialSecurityNumber,name,subscriptionDate);
+            return c;
+        }catch (NumberFormatException e){
+            System.out.println("Blev fel när filen lästes in");
+            e.printStackTrace();
+            System.exit(0);
+        }
         return c;
     }
     public void checkIfCustomerExists(List<Costumer> costumerList, String input){
