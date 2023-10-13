@@ -11,8 +11,8 @@ import java.util.Scanner;
 public class BestGymEver {
     
     protected final String outPutFile = "CustomerTrainedDataFile";
-    Path inPath = Paths.get("CostumersDataFile");
     protected LocalDate localDate = LocalDate.now();
+    Path inPath = Paths.get("CostumersDataFile");
     public static void main(String[] args) {
         BestGymEver gym = new BestGymEver();
         gym.mainProgram();
@@ -82,13 +82,14 @@ public class BestGymEver {
     public boolean getActiveSubscription(Costumer c) {
         LocalDate localDateOneYearAgo = localDate.minusYears(1);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYYMMdd");
-        int dateNow = Integer.parseInt(dtf.format(localDateOneYearAgo));
-        return c.getSubscriptionDate()  > dateNow;
+        int dateOneYearAgo = Integer.parseInt(dtf.format(localDateOneYearAgo));
+        return c.getSubscriptionDate() > dateOneYearAgo;
     }
     public void writeToCostumerTrainedDataFile(Costumer c){
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outPutFile, true)))) {
             if(getActiveSubscription(c)){
                 writer.print("\n" + c.getName() + " " + c.getSocialSecurityNumber() + " " + localDate);
+                System.out.println("Denna kund är en aktiv medlem!");
             }else{
                 System.out.println("Den här kunden är inte en aktiv medlem! Hen måste betala först!");
             }
