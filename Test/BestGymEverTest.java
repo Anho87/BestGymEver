@@ -47,10 +47,4 @@ public class BestGymEverTest {
             System.out.println("Filen kunde inte läsas");
         }
     }
-    
-    
-    
-    
-    
-    
 }
