@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -17,7 +15,8 @@ public class BestGymEver {
 
     protected final String outPutFile = "CustomerTrainedDataFile";
     protected LocalDate localDate = LocalDate.now();
-    Path inPath = Paths.get("CostumersDataFile");
+    protected Path inPath = Paths.get("CostumersDataFile");
+    protected JTextArea textArea = new JTextArea();
 
     public static void main(String[] args) {
         BestGymEver gym = new BestGymEver();
@@ -34,8 +33,8 @@ public class BestGymEver {
     public void readFromDataFile(List<Costumer> costumerList) {
         try (Scanner scanner = new Scanner(inPath)) {
             while (scanner.hasNext()) {
-                String firstLine = "";
-                String secondLine = "";
+                String firstLine;
+                String secondLine;
                 if (scanner.hasNext()) {
                     firstLine = scanner.nextLine();
                     if (scanner.hasNext()) {
@@ -89,16 +88,34 @@ public class BestGymEver {
                 found = true;
                 if (getActiveSubscription(c)) {
                     writeToCostumerTrainedDataFile(c);
-                    System.out.println("Denna kund är en aktiv medlem!");
-                    break;
+                    setTextArea(1);
                 } else {
-                    System.out.println("Den här kunden är inte en aktiv medlem! Hen måste betala först!");
-                    break;
+                    setTextArea(2);
                 }
+                break;
             }
         }
         if (!found) {
-            System.out.println("Finns ingen medlem med detta namn eller personnummer, denna person får ej vara här!");
+            setTextArea(3);
+        }
+    }
+
+    public void setTextArea(int access) {
+        Font customFont = new Font("Arial", Font.BOLD, 44);
+        textArea.setFont(customFont);
+        switch (access) {
+            case 1 -> {
+                textArea.setForeground(Color.GREEN);
+                textArea.append("ACCESS GRANTED" + "\n" + "betalande kund");
+            }
+            case 2 -> {
+                textArea.setForeground(Color.RED);
+                textArea.append("ACCESS DENIED" + "\n" + "ej betalande kund");
+            }
+            case 3 -> {
+                textArea.setForeground(Color.RED);
+                textArea.append("ACCESS DENIED" + "\n" + "obehörig person");
+            }
         }
     }
 
@@ -131,8 +148,8 @@ public class BestGymEver {
         } catch (IOException e) {
             System.out.println("Filen kunde inte läsas");
         }
-        JFrame frame = new JFrame("Personer som har tränat");
-        frame.setSize(250, 400);
+        JFrame frame = new JFrame("Kunder som tränat");
+        frame.setSize(290, 400);
 
         JTextArea textArea = new JTextArea();
         textArea.setBorder(new LineBorder(Color.BLACK));
@@ -150,14 +167,14 @@ public class BestGymEver {
         frame.setSize(430, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         frame.setLayout(new BorderLayout());
-
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextField textField = new JTextField(15);
         JButton button1 = new JButton("Sök medlem");
         JButton button2 = new JButton("Kunder som tränat");
-        JTextArea textArea = new JTextArea();
+        textArea.setBackground(Color.BLACK);
         textArea.setEditable(false);
 
         topPanel.add(textField);
@@ -165,15 +182,11 @@ public class BestGymEver {
         topPanel.add(button2);
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(textArea);
-        
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkIfCustomerExists(costumerList, textField.getText());
-                textArea.append("hej");
-            }
-        });
 
+        button1.addActionListener(e -> {
+            textArea.setText("");
+            checkIfCustomerExists(costumerList, textField.getText());
+        });
 
         button2.addActionListener(e -> printTrainedDataFileToWindow());
         frame.setVisible(true);
