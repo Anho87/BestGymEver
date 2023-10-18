@@ -17,6 +17,7 @@ public class BestGymEver {
     protected LocalDate localDate = LocalDate.now();
     protected Path inPath = Paths.get("CostumersDataFile");
     protected JTextArea textArea = new JTextArea();
+    protected List<Costumer> costumerList = new ArrayList<>();
 
     public static void main(String[] args) {
         BestGymEver gym = new BestGymEver();
@@ -24,26 +25,22 @@ public class BestGymEver {
     }
 
     public void mainProgram() {
-        List<Costumer> costumerList = new ArrayList<>();
-        readFromDataFile(costumerList);
-        frame(costumerList);
-
+        readFromDataFile(costumerList,inPath);
+        frame();
     }
-
-    public void readFromDataFile(List<Costumer> costumerList) {
+    public List<Costumer> readFromDataFile(List<Costumer> costumerList, Path inPath) {
         try (Scanner scanner = new Scanner(inPath)) {
             while (scanner.hasNext()) {
                 String firstLine;
                 String secondLine;
+                firstLine = scanner.nextLine();
                 if (scanner.hasNext()) {
-                    firstLine = scanner.nextLine();
-                    if (scanner.hasNext()) {
-                        secondLine = scanner.nextLine();
-                        Costumer c = createCostumer(firstLine, secondLine);
-                        costumerList.add(c);
-                    }
+                    secondLine = scanner.nextLine();
+                    Costumer c = createCostumer(firstLine, secondLine);
+                    costumerList.add(c);
+                    
                 }
-            }
+            } return costumerList;
         } catch (NoSuchFileException e) {
             System.out.println("Filen kunde inte hittas");
             e.printStackTrace();
@@ -57,6 +54,7 @@ public class BestGymEver {
             e.printStackTrace();
             System.exit(0);
         }
+        return costumerList;
     }
 
     public Costumer createCostumer(String firstLine, String secondLine) {
@@ -81,18 +79,17 @@ public class BestGymEver {
         return c;
     }
 
-    public void checkIfCustomerExists(List<Costumer> costumerList, String input) {
+    public void checkIfCustomerExists(String input) {
         boolean found = false;
         for (Costumer c : costumerList) {
             if (c.getName().equalsIgnoreCase(input) || c.getSocialSecurityNumber().equalsIgnoreCase(input)) {
                 found = true;
                 if (getActiveSubscription(c)) {
-                    writeToCostumerTrainedDataFile(c);
+                    writeToCostumerTrainedDataFile(c,outPutFile);
                     setTextArea(1);
                 } else {
                     setTextArea(2);
                 }
-                break;
             }
         }
         if (!found) {
@@ -106,27 +103,27 @@ public class BestGymEver {
         switch (access) {
             case 1 -> {
                 textArea.setForeground(Color.GREEN);
-                textArea.append("ACCESS GRANTED" + "\n" + "betalande kund");
+                textArea.append("ACCESS GRANTED\n" + "betalande kund");
             }
             case 2 -> {
                 textArea.setForeground(Color.RED);
-                textArea.append("ACCESS DENIED" + "\n" + "ej betalande kund");
+                textArea.append("ACCESS DENIED\n" + "ej betalande kund");
             }
             case 3 -> {
                 textArea.setForeground(Color.RED);
-                textArea.append("ACCESS DENIED" + "\n" + "obehörig person");
+                textArea.append("ACCESS DENIED\n" + "obehörig person");
             }
         }
     }
 
     public boolean getActiveSubscription(Costumer c) {
         LocalDate localDateOneYearAgo = localDate.minusYears(1);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYYMMdd");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         int dateOneYearAgo = Integer.parseInt(dtf.format(localDateOneYearAgo));
         return c.getSubscriptionDate() > dateOneYearAgo;
     }
 
-    public void writeToCostumerTrainedDataFile(Costumer c) {
+    public void writeToCostumerTrainedDataFile(Costumer c, String outPutFile) {
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outPutFile, true)))) {
             writer.print("\n" + c.getName() + " " + c.getSocialSecurityNumber() + " " + localDate);
         } catch (FileNotFoundException e) {
@@ -150,6 +147,7 @@ public class BestGymEver {
         }
         JFrame frame = new JFrame("Kunder som tränat");
         frame.setSize(290, 400);
+        frame.setResizable(false);
 
         JTextArea textArea = new JTextArea();
         textArea.setBorder(new LineBorder(Color.BLACK));
@@ -162,7 +160,7 @@ public class BestGymEver {
         frame.setVisible(true);
     }
 
-    public void frame(List<Costumer> costumerList) {
+    public void frame() {
         JFrame frame = new JFrame("Best Gym Ever");
         frame.setSize(430, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -185,7 +183,7 @@ public class BestGymEver {
 
         button1.addActionListener(e -> {
             textArea.setText("");
-            checkIfCustomerExists(costumerList, textField.getText());
+            checkIfCustomerExists(textField.getText().trim());
         });
 
         button2.addActionListener(e -> printTrainedDataFileToWindow());
