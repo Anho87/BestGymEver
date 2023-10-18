@@ -79,7 +79,7 @@ public class BestGymEver {
         return c;
     }
 
-    public String checkIfCustomerExists(String input, List<Costumer> costumerList) {
+    public String checkIfCustomerExists(String input, List<Costumer> costumerList,String outPutFile) {
         for (Costumer c : costumerList) {
             if (c.getName().equalsIgnoreCase(input) || c.getSocialSecurityNumber().equalsIgnoreCase(input)) {
                 if (getActiveSubscription(c)) {
@@ -182,7 +182,7 @@ public class BestGymEver {
 
         button1.addActionListener(e -> {
             textArea.setText("");
-            checkIfCustomerExists(textField.getText().trim(),costumerList);
+            checkIfCustomerExists(textField.getText().trim(),costumerList,outPutFile);
         });
 
         button2.addActionListener(e -> printTrainedDataFileToWindow());

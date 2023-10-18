@@ -47,11 +47,11 @@ public class BestGymEverTest {
     public void checkIfMember(){
         List<Costumer> costumerList = new ArrayList<>();
         costumerList = gym.readFromDataFile(costumerList,inPath);
-        assertEquals("Not a member!", gym.checkIfCustomerExists("Andreas Holmberg", costumerList));
-        assertEquals("Member but no subscription!",gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList));
+        assertEquals("Not a member!", gym.checkIfCustomerExists("Andreas Holmberg", costumerList,outPutTestFile));
+        assertEquals("Member but no subscription!",gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList,outPutTestFile));
         
         costumerList.get(1).setSubscriptionDate(dateThreeHundredDaysAgo);
-        assertEquals("Paying member!", gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList));
+        assertEquals("Paying member!", gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList,outPutTestFile));
         
     }
     @Test
