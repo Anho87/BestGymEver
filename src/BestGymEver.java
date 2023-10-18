@@ -79,22 +79,21 @@ public class BestGymEver {
         return c;
     }
 
-    public void checkIfCustomerExists(String input) {
-        boolean found = false;
+    public String checkIfCustomerExists(String input, List<Costumer> costumerList) {
         for (Costumer c : costumerList) {
             if (c.getName().equalsIgnoreCase(input) || c.getSocialSecurityNumber().equalsIgnoreCase(input)) {
-                found = true;
                 if (getActiveSubscription(c)) {
                     writeToCostumerTrainedDataFile(c,outPutFile);
                     setTextArea(1);
+                    return"Paying member!";
                 } else {
                     setTextArea(2);
+                    return"Member but no subscription!";
                 }
             }
         }
-        if (!found) {
             setTextArea(3);
-        }
+            return "Not a member!";
     }
 
     public void setTextArea(int access) {
@@ -183,7 +182,7 @@ public class BestGymEver {
 
         button1.addActionListener(e -> {
             textArea.setText("");
-            checkIfCustomerExists(textField.getText().trim());
+            checkIfCustomerExists(textField.getText().trim(),costumerList);
         });
 
         button2.addActionListener(e -> printTrainedDataFileToWindow());

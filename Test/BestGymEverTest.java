@@ -43,15 +43,25 @@ public class BestGymEverTest {
         assertEquals("Diamanda Djedi", costumerList.get(3).getName());
         assertEquals(20230130, costumerList.get(3).getSubscriptionDate());
     }
-
+    @Test
+    public void checkIfMember(){
+        List<Costumer> costumerList = new ArrayList<>();
+        costumerList = gym.readFromDataFile(costumerList,inPath);
+        assertEquals("Not a member!", gym.checkIfCustomerExists("Andreas Holmberg", costumerList));
+        assertEquals("Member but no subscription!",gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList));
+        
+        costumerList.get(1).setSubscriptionDate(dateThreeHundredDaysAgo);
+        assertEquals("Paying member!", gym.checkIfCustomerExists(costumerList.get(1).getName(),costumerList));
+        
+    }
     @Test
     public void checkSubscription() {
         assertFalse(gym.getActiveSubscription(c1));
         assertTrue(gym.getActiveSubscription(c2));
     }
-
     @Test
     public void outputTest() {
         gym.writeToCostumerTrainedDataFile(c2,outPutTestFile);
     }
+   
 }
