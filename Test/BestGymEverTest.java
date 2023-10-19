@@ -1,6 +1,10 @@
 import org.junit.Test;
 
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -45,6 +49,7 @@ public class BestGymEverTest {
     }
     @Test
     public void checkIfMember(){
+        gym.test = true;
         List<Costumer> costumerList = new ArrayList<>();
         costumerList = gym.readFromDataFile(costumerList,inPath);
         assertEquals("Not a member!", gym.checkIfCustomerExists("Andreas Holmberg", costumerList,outPutTestFile));
@@ -62,6 +67,16 @@ public class BestGymEverTest {
     @Test
     public void outputTest() {
         gym.writeToCostumerTrainedDataFile(c2,outPutTestFile);
+        try (BufferedReader in = new BufferedReader(new FileReader(outPutTestFile))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                assertEquals("Aaron Holmberg 200101011234 2023-10-19",line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("hitta inte filen" + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Filen kunde inte läsas");
+        }
     }
     
 }

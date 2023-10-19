@@ -18,6 +18,7 @@ public class BestGymEver {
     protected Path inPath = Paths.get("CostumersDataFile");
     protected JTextArea textArea = new JTextArea();
     protected List<Costumer> costumerList = new ArrayList<>();
+    protected boolean test = false;
 
     public static void main(String[] args) {
         BestGymEver gym = new BestGymEver();
@@ -85,9 +86,13 @@ public class BestGymEver {
         for (Costumer c : costumerList) {
             if (c.getName().equalsIgnoreCase(input) || c.getSocialSecurityNumber().equalsIgnoreCase(input)) {
                 if (getActiveSubscription(c)) {
-                    writeToCostumerTrainedDataFile(c, outPutFile);
-                    setTextArea(1);
-                    return "Paying member!";
+                    if(!test){
+                        writeToCostumerTrainedDataFile(c, outPutFile);
+                        setTextArea(1);
+                        return null;
+                    }else{
+                        return "Paying member!";
+                    }
                 } else {
                     setTextArea(2);
                     return "Member but no subscription!";
