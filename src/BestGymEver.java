@@ -103,6 +103,7 @@ public class BestGymEver {
         return "Not a member!";
     }
 
+    
     public void setTextArea(int access) {
         Font customFont = new Font("Arial", Font.BOLD, 44);
         textArea.setFont(customFont);
