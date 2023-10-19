@@ -63,5 +63,5 @@ public class BestGymEverTest {
     public void outputTest() {
         gym.writeToCostumerTrainedDataFile(c2,outPutTestFile);
     }
-   
+    
 }

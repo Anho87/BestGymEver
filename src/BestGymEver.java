@@ -25,9 +25,10 @@ public class BestGymEver {
     }
 
     public void mainProgram() {
-        readFromDataFile(costumerList,inPath);
+        readFromDataFile(costumerList, inPath);
         frame();
     }
+
     public List<Costumer> readFromDataFile(List<Costumer> costumerList, Path inPath) {
         try (Scanner scanner = new Scanner(inPath)) {
             while (scanner.hasNext()) {
@@ -38,9 +39,10 @@ public class BestGymEver {
                     secondLine = scanner.nextLine();
                     Costumer c = createCostumer(firstLine, secondLine);
                     costumerList.add(c);
-                    
+
                 }
-            } return costumerList;
+            }
+            return costumerList;
         } catch (NoSuchFileException e) {
             System.out.println("Filen kunde inte hittas");
             e.printStackTrace();
@@ -79,21 +81,21 @@ public class BestGymEver {
         return c;
     }
 
-    public String checkIfCustomerExists(String input, List<Costumer> costumerList,String outPutFile) {
+    public String checkIfCustomerExists(String input, List<Costumer> costumerList, String outPutFile) {
         for (Costumer c : costumerList) {
             if (c.getName().equalsIgnoreCase(input) || c.getSocialSecurityNumber().equalsIgnoreCase(input)) {
                 if (getActiveSubscription(c)) {
-                    writeToCostumerTrainedDataFile(c,outPutFile);
+                    writeToCostumerTrainedDataFile(c, outPutFile);
                     setTextArea(1);
-                    return"Paying member!";
+                    return "Paying member!";
                 } else {
                     setTextArea(2);
-                    return"Member but no subscription!";
+                    return "Member but no subscription!";
                 }
             }
         }
-            setTextArea(3);
-            return "Not a member!";
+        setTextArea(3);
+        return "Not a member!";
     }
 
     public void setTextArea(int access) {
@@ -182,7 +184,7 @@ public class BestGymEver {
 
         button1.addActionListener(e -> {
             textArea.setText("");
-            checkIfCustomerExists(textField.getText().trim(),costumerList,outPutFile);
+            checkIfCustomerExists(textField.getText().trim(), costumerList, outPutFile);
         });
 
         button2.addActionListener(e -> printTrainedDataFileToWindow());
