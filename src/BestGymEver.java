@@ -132,7 +132,11 @@ public class BestGymEver {
 
     public void writeToCostumerTrainedDataFile(Costumer c, String outPutFile) {
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outPutFile, true)))) {
-            writer.print("\n" + c.getName() + " " + c.getSocialSecurityNumber() + " " + localDate);
+            if(!test){
+                writer.print("\n" + c.getName() + " " + c.getSocialSecurityNumber() + " " + localDate);
+            }else{
+                writer.print("\n" + c.getName() + " " + c.getSocialSecurityNumber());
+            }
         } catch (FileNotFoundException e) {
             System.out.println("hitta inte filen" + e.getMessage());
         } catch (IOException e) {

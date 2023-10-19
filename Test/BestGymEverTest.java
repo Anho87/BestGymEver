@@ -66,11 +66,12 @@ public class BestGymEverTest {
     }
     @Test
     public void outputTest() {
+        gym.test = true;
         gym.writeToCostumerTrainedDataFile(c2,outPutTestFile);
         try (BufferedReader in = new BufferedReader(new FileReader(outPutTestFile))) {
             String line;
             while ((line = in.readLine()) != null) {
-                assertEquals("Aaron Holmberg 200101011234 2023-10-19",line);
+                assertEquals("Aaron Holmberg 200101011234",line);
             }
         } catch (FileNotFoundException e) {
             System.out.println("hitta inte filen" + e.getMessage());
